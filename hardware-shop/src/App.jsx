@@ -21,10 +21,10 @@ const routes = [
 ]
 
 const navItems = [
-  { page: 'service', label: 'Services' },
-  { page: 'product', label: 'Products' },
-  { page: 'home', label: 'Projects', section: 'projects' },
-  { page: 'contact', label: 'Contact' },
+  { page: 'service', label: 'Usługi' },
+  { page: 'product', label: 'Produkty' },
+  { page: 'home', label: 'Realizacje', section: 'projects' },
+  { page: 'contact', label: 'Kontakt' },
 ]
 
 const serviceCards = [
@@ -360,7 +360,7 @@ function Header({ route, navigate }) {
           type="button"
           onClick={() => navigate('contact')}
         >
-          Get a Quote
+          Poproś o wycenę
         </button>
       </div>
     </header>
@@ -372,7 +372,7 @@ function Footer() {
     <footer className="site-footer">
       <div>
         <strong>Modern Tradesman Co.</strong>
-        <p>© 2024 Modern Tradesman Construction. Built for Reliability.</p>
+        <p>© 2024 Modern Tradesman Construction. Zbudowane na solidnych fundamentach.</p>
       </div>
       <nav aria-label="Linki stopki">
         <a href="#privacy">Polityka Prywatności</a>
@@ -679,7 +679,7 @@ function ProductPage({ navigate }) {
   return (
     <>
       <section className="page-section">
-        <Breadcrumb items={['Produkty', 'Farby', 'Farba wewnętrzna']} />
+        <Breadcrumb items={['Strona główna', 'Produkty', 'Farba wewnętrzna']} />
         <div className="product-hero">
           <div className="product-media">
             <img src={paintSwatchImg} alt="Próbka koloru farby wewnętrznej" />
@@ -774,7 +774,7 @@ function ServicePage({ navigate }) {
   return (
     <>
       <section className="page-section">
-        <Breadcrumb items={['Home', 'Usługi', 'Malowanie ścian']} />
+        <Breadcrumb items={['Strona główna', 'Usługi', 'Malowanie ścian']} />
         <div className="service-hero">
           <div>
             <p className="eyebrow">Usługi wykończeniowe</p>
@@ -931,7 +931,7 @@ function ServicePage({ navigate }) {
 function CartPage({ quantity, setQuantity, total, navigate }) {
   return (
     <section className="page-section tall">
-      <Breadcrumb items={['Home', 'Koszyk']} />
+      <Breadcrumb items={['Strona główna', 'Koszyk']} />
       <h1>Twój koszyk</h1>
       <div className="cart-layout">
         <div className="cart-table">
@@ -1021,7 +1021,7 @@ function CheckoutPage({ payment, setPayment, total, navigate }) {
 
   return (
     <section className="page-section tall">
-      <Breadcrumb items={['Home', 'Koszyk', 'Płatność']} />
+      <Breadcrumb items={['Strona główna', 'Koszyk', 'Płatność']} />
       <h1>Zamówienie i Płatność</h1>
       <div className="checkout-layout">
         <div className="checkout-main">
