@@ -5,6 +5,32 @@
   --paper: #ffffff;
   --mist: #f3f6f9;
   --line: #d7dde5;
+  --surface: #ffffff;
+  --surface-soft: #eef2f5;
+  --surface-muted: #e9edf2;
+  --surface-raised: #ffffff;
+  --header-bg: rgba(255, 255, 255, 0.95);
+  --field-bg: #f3f6f9;
+  --label-ink: #3c424d;
+  --accent: #071832;
+  --primary-bg: #071832;
+  --primary-ink: #ffffff;
+  --primary-border: #071832;
+  --section-strong: #071832;
+  --section-strong-2: #1b2e4b;
+  --section-strong-muted: #c2cad6;
+  --outline-on-strong: rgba(255, 255, 255, 0.35);
+  --outline-on-strong-soft: rgba(255, 255, 255, 0.2);
+  --cta-bg: #e3e8ed;
+  --highlight-bg: #f5f6f7;
+  --table-head-bg: #f0f2f5;
+  --timeline-bg: #dfe3e8;
+  --map-wash: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.45));
+  --map-grid-a: #dce2e8;
+  --map-grid-b: #e7ebef;
+  --map-bg: #eef2f5;
+  --map-shape: rgba(7, 24, 50, 0.15);
+  --map-highlight: rgba(255, 216, 97, 0.38);
   --navy: #071832;
   --navy-2: #1b2e4b;
   --blue: #3b7ddb;
@@ -24,6 +50,42 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+[data-theme="dark"] {
+  --ink: #edf3ff;
+  --ink-soft: #c2ccda;
+  --ink-muted: #8f9cae;
+  --paper: #0c111b;
+  --mist: #090d15;
+  --line: #293447;
+  --surface: #121a28;
+  --surface-soft: #182436;
+  --surface-muted: #202c3f;
+  --surface-raised: #151f2f;
+  --header-bg: rgba(9, 13, 21, 0.94);
+  --field-bg: #101827;
+  --label-ink: #d6deea;
+  --accent: #ffd861;
+  --primary-bg: #ffd861;
+  --primary-ink: #241d00;
+  --primary-border: #ffd861;
+  --section-strong: #050916;
+  --section-strong-2: #0c1423;
+  --section-strong-muted: #9ca9bb;
+  --outline-on-strong: rgba(255, 255, 255, 0.28);
+  --outline-on-strong-soft: rgba(255, 255, 255, 0.14);
+  --cta-bg: #101827;
+  --highlight-bg: #182232;
+  --table-head-bg: #172132;
+  --timeline-bg: #283548;
+  --map-wash: linear-gradient(90deg, rgba(9, 13, 21, 0.92), rgba(9, 13, 21, 0.58));
+  --map-grid-a: #1f2a3c;
+  --map-grid-b: #172033;
+  --map-bg: #101827;
+  --map-shape: rgba(255, 216, 97, 0.12);
+  --map-highlight: rgba(255, 216, 97, 0.22);
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
 }
 
 * {

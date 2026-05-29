@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 
 import blueprintsImg from './assets/site/blueprints.jpg'
-import oakFloorImg from './assets/site/oak-floor.jpg'
 import paintBucketImg from './assets/site/paint-bucket.jpg'
 import paintSwatchImg from './assets/site/paint-swatch.jpg'
 import painterImg from './assets/site/painter.jpg'
@@ -162,6 +161,16 @@ function getInitialRoute() {
   return routes.includes(hash) ? hash : 'home'
 }
 
+function getInitialTheme() {
+  const savedTheme = window.localStorage.getItem('theme')
+
+  if (savedTheme === 'dark' || savedTheme === 'light') {
+    return savedTheme
+  }
+
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
 function formatPLN(value) {
   return new Intl.NumberFormat('pl-PL', {
     style: 'currency',
@@ -259,6 +268,7 @@ function Icon({ name }) {
 
 function App() {
   const [route, setRoute] = useState(getInitialRoute)
+  const [theme, setTheme] = useState(getInitialTheme)
   const [quantity, setQuantity] = useState(1)
   const [payment, setPayment] = useState('card')
 
@@ -268,7 +278,17 @@ function App() {
     return () => window.removeEventListener('hashchange', onHashChange)
   }, [])
 
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    document.documentElement.style.colorScheme = theme
+    window.localStorage.setItem('theme', theme)
+  }, [theme])
+
   const cartTotal = useMemo(() => quantity * 149, [quantity])
+
+  const toggleTheme = () => {
+    setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))
+  }
 
   const navigate = (page, section) => {
     if (section) {
@@ -287,7 +307,7 @@ function App() {
 
   return (
     <>
-      <Header route={route} navigate={navigate} />
+      <Header route={route} navigate={navigate} theme={theme} toggleTheme={toggleTheme} />
       <main>
         {route === 'home' && <HomePage navigate={navigate} />}
         {route === 'service' && <ServicePage navigate={navigate} />}
@@ -304,7 +324,6 @@ function App() {
           <CheckoutPage
             payment={payment}
             setPayment={setPayment}
-            total={cartTotal}
             navigate={navigate}
             quantity={quantity}
           />
@@ -317,7 +336,7 @@ function App() {
   )
 }
 
-function Header({ route, navigate }) {
+function Header({ route, navigate, theme, toggleTheme }) {
   const activeGroup =
     route === 'service'
       ? 'service'
@@ -356,6 +375,7 @@ function Header({ route, navigate }) {
         <button type="button" aria-label="Szukaj">
           <Icon name="search" />
         </button>
+        <ThemeToggle theme={theme} onToggle={toggleTheme} />
         <button
           className="quote-button"
           type="button"
@@ -365,6 +385,27 @@ function Header({ route, navigate }) {
         </button>
       </div>
     </header>
+  )
+}
+
+function ThemeToggle({ theme, onToggle }) {
+  const isDark = theme === 'dark'
+
+  return (
+    <button
+      className={`theme-toggle ${isDark ? 'is-dark' : ''}`}
+      type="button"
+      aria-label={isDark ? 'Wlacz tryb jasny' : 'Wlacz tryb ciemny'}
+      aria-pressed={isDark}
+      onClick={onToggle}
+    >
+      <span className="theme-toggle-track" aria-hidden="true">
+        <span className="theme-orbit">
+          <span className="theme-sun"></span>
+          <span className="theme-moon"></span>
+        </span>
+      </span>
+    </button>
   )
 }
 
@@ -1033,10 +1074,7 @@ function CartPage({ quantity, setQuantity, total, navigate }) {
   )
 }
 
-function CheckoutPage({ payment, setPayment, total, navigate, quantity }) {
-  const shipping = 25
-  const orderTotal = total + shipping
-
+function CheckoutPage({ payment, setPayment, navigate, quantity }) {
   return (
     <section className="page-section tall">
       <Breadcrumb items={['Strona główna', 'Koszyk', 'Płatność']} />
