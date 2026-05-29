@@ -1,16 +1,114 @@
-# React + Vite
+# Hardware Shop Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite frontend for Modern Tradesman Co., a construction services and hardware shop interface. The application combines service presentation, product browsing, cart management, checkout, order confirmation, and contact/quote workflows.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Multi-page experience handled with hash routing.
+- Header navigation with cart, account, search, quote CTA, and theme toggle.
+- Animated dark mode switch that moves from sun to moon.
+- Persistent theme preference stored in `localStorage`.
+- Home, service, product, cart, checkout, confirmation, and contact screens.
+- Product and service cards using local image assets.
+- Responsive grids and mobile-friendly layouts.
+- ESLint setup for code quality checks.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19
+- Vite 8
+- CSS custom properties
+- ESLint 10
 
-## Expanding the ESLint configuration
+## Requirements
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Node.js
+- npm
+
+## Installation
+
+```bash
+npm install
+```
+
+## Development
+
+```bash
+npm run dev
+```
+
+Vite will print the local development URL, usually:
+
+```text
+http://127.0.0.1:5173/
+```
+
+On Windows PowerShell, if script execution policy blocks `npm`, run commands with `npm.cmd` instead:
+
+```bash
+npm.cmd run dev
+```
+
+## Build
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+Preview the production build:
+
+```bash
+npm run preview
+```
+
+## Lint
+
+```bash
+npm run lint
+```
+
+## App Routes
+
+The app uses hash-based navigation:
+
+```text
+#/service
+#/product
+#/cart
+#/checkout
+#/confirmation
+#/contact
+```
+
+The empty hash or root URL opens the homepage.
+
+## Source Overview
+
+```text
+src/
+  App.jsx      Main React application, page components, route state, cart state, theme state
+  App.css      Layout, components, responsive styles, and dark mode animation
+  index.css    Global CSS variables and light/dark theme tokens
+  main.jsx     React entry point
+  assets/      Local images used by the UI
+```
+
+## Theme Behavior
+
+The theme is initialized from `localStorage`. If no saved preference exists, it falls back to the system color scheme using `prefers-color-scheme`.
+
+The selected theme is applied to the document as:
+
+```html
+<html data-theme="dark">
+```
+
+or:
+
+```html
+<html data-theme="light">
+```
+
+This drives the color palette through CSS variables.
