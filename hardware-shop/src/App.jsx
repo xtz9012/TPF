@@ -21,10 +21,10 @@ const routes = [
 ]
 
 const navItems = [
-  { page: 'service', label: 'Services' },
-  { page: 'product', label: 'Products' },
-  { page: 'home', label: 'Projects', section: 'projects' },
-  { page: 'contact', label: 'Contact' },
+  { page: 'service', label: 'Usługi' },
+  { page: 'product', label: 'Produkty' },
+  { page: 'home', label: 'Realizacje', section: 'projects' },
+  { page: 'contact', label: 'Kontakt' },
 ]
 
 const serviceCards = [
@@ -306,9 +306,10 @@ function App() {
             setPayment={setPayment}
             total={cartTotal}
             navigate={navigate}
+            quantity={quantity}
           />
         )}
-        {route === 'confirmation' && <ConfirmationPage navigate={navigate} />}
+        {route === 'confirmation' && <ConfirmationPage navigate={navigate} quantity={quantity} />}
         {route === 'contact' && <ContactPage />}
       </main>
       <Footer />
@@ -360,7 +361,7 @@ function Header({ route, navigate }) {
           type="button"
           onClick={() => navigate('contact')}
         >
-          Get a Quote
+          Poproś o wycenę
         </button>
       </div>
     </header>
@@ -372,7 +373,13 @@ function Footer() {
     <footer className="site-footer">
       <div>
         <strong>Modern Tradesman Co.</strong>
-        <p>© 2024 Modern Tradesman Construction. Built for Reliability.</p>
+        <p>© 2024 Modern Tradesman Construction. Zbudowane na solidnych fundamentach.</p>
+        <div className="social-links">
+          <a href="https://facebook.com" title="Facebook" target="_blank" rel="noopener noreferrer">Facebook</a>
+          <a href="https://instagram.com" title="Instagram" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="https://linkedin.com" title="LinkedIn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://youtube.com" title="YouTube" target="_blank" rel="noopener noreferrer">YouTube</a>
+        </div>
       </div>
       <nav aria-label="Linki stopki">
         <a href="#privacy">Polityka Prywatności</a>
@@ -671,6 +678,17 @@ function HomePage({ navigate }) {
           </Button>
         </div>
       </section>
+
+      <section className="newsletter-section">
+        <div className="newsletter-content">
+          <h2>Bądź na bieżąco z najnowszymi poradami i promocjami</h2>
+          <p>Subskrybuj nasz newsletter i otrzymuj inspiracje remontowe oraz specjalne oferty.</p>
+          <form className="newsletter-form" onSubmit={(e) => { e.preventDefault(); alert('Dziękujemy za subskrypcję! Potwierdzenie wysłane na Twój adres e-mail.'); }}>
+            <input type="email" placeholder="Twój adres e-mail" required />
+            <button type="submit">Subskrybuj</button>
+          </form>
+        </div>
+      </section>
     </>
   )
 }
@@ -679,7 +697,7 @@ function ProductPage({ navigate }) {
   return (
     <>
       <section className="page-section">
-        <Breadcrumb items={['Produkty', 'Farby', 'Farba wewnętrzna']} />
+        <Breadcrumb items={['Strona główna', 'Produkty', 'Farba wewnętrzna']} />
         <div className="product-hero">
           <div className="product-media">
             <img src={paintSwatchImg} alt="Próbka koloru farby wewnętrznej" />
@@ -774,7 +792,7 @@ function ServicePage({ navigate }) {
   return (
     <>
       <section className="page-section">
-        <Breadcrumb items={['Home', 'Usługi', 'Malowanie ścian']} />
+        <Breadcrumb items={['Strona główna', 'Usługi', 'Malowanie ścian']} />
         <div className="service-hero">
           <div>
             <p className="eyebrow">Usługi wykończeniowe</p>
@@ -931,7 +949,7 @@ function ServicePage({ navigate }) {
 function CartPage({ quantity, setQuantity, total, navigate }) {
   return (
     <section className="page-section tall">
-      <Breadcrumb items={['Home', 'Koszyk']} />
+      <Breadcrumb items={['Strona główna', 'Koszyk']} />
       <h1>Twój koszyk</h1>
       <div className="cart-layout">
         <div className="cart-table">
@@ -996,7 +1014,7 @@ function CartPage({ quantity, setQuantity, total, navigate }) {
           <label htmlFor="coupon">Kod rabatowy</label>
           <div>
             <input id="coupon" placeholder="WPISZ KOD" />
-            <button type="button">Zastosuj</button>
+            <button type="button" onClick={() => alert('Kodów rabatowych nie ma dostępnych w tej chwili. Sprawdź naszą stronę główną aby znaleźć aktualne promocje.')}>Zastosuj</button>
           </div>
         </form>
       </div>
@@ -1015,13 +1033,13 @@ function CartPage({ quantity, setQuantity, total, navigate }) {
   )
 }
 
-function CheckoutPage({ payment, setPayment, total, navigate }) {
+function CheckoutPage({ payment, setPayment, total, navigate, quantity }) {
   const shipping = 25
   const orderTotal = total + shipping
 
   return (
     <section className="page-section tall">
-      <Breadcrumb items={['Home', 'Koszyk', 'Płatność']} />
+      <Breadcrumb items={['Strona główna', 'Koszyk', 'Płatność']} />
       <h1>Zamówienie i Płatność</h1>
       <div className="checkout-layout">
         <div className="checkout-main">
@@ -1085,24 +1103,24 @@ function CheckoutPage({ payment, setPayment, total, navigate }) {
             <img src={paintSwatchImg} alt="" />
             <div>
               <h3>Farba wewnętrzna Premium 10L</h3>
-              <p>Sztuk: 1</p>
-              <strong>{formatPLN(total)}</strong>
+              <p>Sztuk: {quantity}</p>
+              <strong>{formatPLN(quantity * 149)}</strong>
             </div>
           </div>
           <hr />
           <dl>
             <div>
               <dt>Wartość produktów</dt>
-              <dd>{formatPLN(total)}</dd>
+              <dd>{formatPLN(quantity * 149)}</dd>
             </div>
             <div>
               <dt>Dostawa (Kurier)</dt>
-              <dd>{formatPLN(shipping)}</dd>
+              <dd>{formatPLN(25)}</dd>
             </div>
           </dl>
           <div className="checkout-total">
             <span>Razem</span>
-            <strong>{formatPLN(orderTotal)}</strong>
+            <strong>{formatPLN(quantity * 149 + 25)}</strong>
           </div>
           <Button variant="accent" icon="arrow" onClick={() => navigate('confirmation')} className="wide">
             Kupuję i płacę
@@ -1116,7 +1134,7 @@ function CheckoutPage({ payment, setPayment, total, navigate }) {
   )
 }
 
-function ConfirmationPage({ navigate }) {
+function ConfirmationPage({ navigate, quantity }) {
   return (
     <section className="page-section tall">
       <div className="confirmation-hero">
@@ -1134,11 +1152,10 @@ function ConfirmationPage({ navigate }) {
         <div>
           <article className="order-card">
             <h2>Szczegóły zamówienia</h2>
-            <OrderLine image={oakFloorImg} title="Dębowe deski podłogowe - Premium" meta="25 m²" price="4 250,00 zł" />
-            <OrderLine image={paintBucketImg} title="Farba Ceramiczna - Biały Alabaster" meta="3 x 5L" price="597,00 zł" />
+            <OrderLine image={paintSwatchImg} title="Farba wewnętrzna Premium 10L" meta={`${quantity} szt.`} price={formatPLN(quantity * 149)} />
+            <OrderLine image={paintBucketImg} title="Dostawa (Kurier)" meta="Wysyłka w ciągu 24h" price={formatPLN(25)} />
             <div className="order-total">
-              <span>Suma całkowita</span>
-              <strong>4 997,00 zł</strong>
+              <span>Suma całkowita: {formatPLN(quantity * 149 + 25)}</span>
             </div>
           </article>
           <article className="service-banner">
@@ -1286,7 +1303,7 @@ function ContactPage() {
               <li>Czy występują pęknięcia do szpachlowania?</li>
               <li>Czy zabezpieczamy meble i podłogi?</li>
             </ul>
-            <button className="download-link" type="button">
+            <button className="download-link" type="button" onClick={() => alert('Formularz wyceny będzie dostępny do pobrania wkrótce. Skontaktuj się z nami, aby otrzymać formularz e-mailowo.')}>
               Pobierz formularz wyceny (PDF)
               <Icon name="download" />
             </button>
