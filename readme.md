@@ -73,4 +73,4 @@ npm run preview
 
 ## Notes
 
-The app uses hash-based navigation, so pages are selected with URLs such as `#/product`, `#/cart`, and `#/contact`. Theme preference is saved in `localStorage` under the `theme` key.
+The app uses React Router browser navigation, so pages are available under paths such as `/product`, `/cart`, `/login`, and `/account`. Unknown paths render a 404 page. Theme preference is saved in `localStorage` under the `theme` key.
