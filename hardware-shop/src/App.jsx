@@ -1152,13 +1152,13 @@ function CheckoutPage({ payment, setPayment, navigate, quantity }) {
               <dd>{formatPLN(quantity * 149)}</dd>
             </div>
             <div>
-              <dt>Dostawa (Kurier)</dt>
-              <dd>{formatPLN(25)}</dd>
+              <dt>Dostawa</dt>
+              <dd>Odbiór osobisty: Gratis</dd>
             </div>
           </dl>
           <div className="checkout-total">
             <span>Razem</span>
-            <strong>{formatPLN(quantity * 149 + 25)}</strong>
+            <strong>{formatPLN(quantity * 149)}</strong>
           </div>
           <Button variant="accent" icon="arrow" onClick={() => navigate('confirmation')} className="wide">
             Kupuję i płacę
@@ -1191,9 +1191,9 @@ function ConfirmationPage({ navigate, quantity }) {
           <article className="order-card">
             <h2>Szczegóły zamówienia</h2>
             <OrderLine image={paintSwatchImg} title="Farba wewnętrzna Premium 10L" meta={`${quantity} szt.`} price={formatPLN(quantity * 149)} />
-            <OrderLine image={paintBucketImg} title="Dostawa (Kurier)" meta="Wysyłka w ciągu 24h" price={formatPLN(25)} />
+            <OrderLine title="Odbiór osobisty" meta="Gratis" price={formatPLN(0)} />
             <div className="order-total">
-              <span>Suma całkowita: {formatPLN(quantity * 149 + 25)}</span>
+              <span>Suma całkowita: {formatPLN(quantity * 149)}</span>
             </div>
           </article>
           <article className="service-banner">
@@ -1254,7 +1254,7 @@ function ConfirmationPage({ navigate, quantity }) {
 function OrderLine({ image, title, meta, price }) {
   return (
     <div className="order-line">
-      <img src={image} alt="" />
+      {image && <img src={image} alt="" />}
       <div>
         <h3>{title}</h3>
         <p>{meta}</p>
