@@ -4,11 +4,11 @@ React + Vite frontend for Modern Tradesman Co., a construction services and hard
 
 ## Features
 
-- Multi-page experience handled with hash routing.
+- Multi-page experience handled with React Router.
 - Header navigation with cart, account, search, quote CTA, and theme toggle.
 - Animated dark mode switch that moves from sun to moon.
 - Persistent theme preference stored in `localStorage`.
-- Home, service, product, cart, checkout, confirmation, and contact screens.
+- Home, service, product, cart, checkout, confirmation, contact, login, registration, account, and 404 screens.
 - Product and service cards using local image assets.
 - Responsive grids and mobile-friendly layouts.
 - ESLint setup for code quality checks.
@@ -16,6 +16,7 @@ React + Vite frontend for Modern Tradesman Co., a construction services and hard
 ## Tech Stack
 
 - React 19
+- React Router
 - Vite 8
 - CSS custom properties
 - ESLint 10
@@ -71,27 +72,36 @@ npm run lint
 
 ## App Routes
 
-The app uses hash-based navigation:
+The app uses React Router browser routes:
 
 ```text
-#/service
-#/product
-#/cart
-#/checkout
-#/confirmation
-#/contact
+/
+/service
+/product
+/cart
+/checkout
+/confirmation
+/contact
+/login
+/register
+/account
+/*
 ```
 
-The empty hash or root URL opens the homepage.
+The wildcard route displays a 404 page for unknown paths.
 
 ## Source Overview
 
 ```text
 src/
-  App.jsx      Main React application, page components, route state, cart state, theme state
+  App.jsx      React Router setup and shared app state
   App.css      Layout, components, responsive styles, and dark mode animation
+  components/  Reusable layout and UI components
+  data/        Shared product, service, FAQ, and asset data
   index.css    Global CSS variables and light/dark theme tokens
   main.jsx     React entry point
+  pages/       Route-level page components
+  utils/       Formatting and account helper functions
   assets/      Local images used by the UI
 ```
 
