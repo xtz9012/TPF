@@ -17,6 +17,9 @@ const routes = [
   'checkout',
   'confirmation',
   'contact',
+  'login',
+  'register',
+  'account',
 ]
 
 const navItems = [
@@ -171,6 +174,30 @@ function getInitialTheme() {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
 
+function getInitialAccount() {
+  const savedAccount = window.localStorage.getItem('customerAccount')
+
+  if (!savedAccount) {
+    return null
+  }
+
+  try {
+    return JSON.parse(savedAccount)
+  } catch {
+    return null
+  }
+}
+
+function getNameFromEmail(email) {
+  const fallbackName = email.split('@')[0].replace(/[._-]+/g, ' ')
+
+  return fallbackName
+    .split(' ')
+    .filter(Boolean)
+    .map((word) => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
+    .join(' ') || 'Klient'
+}
+
 function formatPLN(value) {
   return new Intl.NumberFormat('pl-PL', {
     style: 'currency',
@@ -271,6 +298,7 @@ function App() {
   const [theme, setTheme] = useState(getInitialTheme)
   const [quantity, setQuantity] = useState(1)
   const [payment, setPayment] = useState('card')
+  const [account, setAccount] = useState(getInitialAccount)
 
   useEffect(() => {
     const onHashChange = () => setRoute(getInitialRoute())
@@ -283,6 +311,15 @@ function App() {
     document.documentElement.style.colorScheme = theme
     window.localStorage.setItem('theme', theme)
   }, [theme])
+
+  useEffect(() => {
+    if (account) {
+      window.localStorage.setItem('customerAccount', JSON.stringify(account))
+      return
+    }
+
+    window.localStorage.removeItem('customerAccount')
+  }, [account])
 
   const cartTotal = useMemo(() => quantity * 149, [quantity])
 
@@ -305,9 +342,52 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const handleLogin = (formData) => {
+    const email = String(formData.get('email') || 'jan.kowalski@example.com')
+
+    setAccount({
+      name: getNameFromEmail(email),
+      email,
+      phone: '+48 123 456 789',
+      company: 'Klient indywidualny',
+      memberSince: 'Maj 2026',
+    })
+
+    navigate('account')
+  }
+
+  const handleRegister = (formData) => {
+    const email = String(formData.get('email') || 'nowy.klient@example.com')
+    const name = String(formData.get('name') || getNameFromEmail(email))
+    const phone = String(formData.get('phone') || '+48 000 000 000')
+    const company = String(formData.get('company') || 'Klient indywidualny')
+
+    setAccount({
+      name,
+      email,
+      phone,
+      company,
+      memberSince: 'Maj 2026',
+    })
+
+    navigate('account')
+  }
+
+  const handleLogout = () => {
+    setAccount(null)
+    navigate('login')
+  }
+
   return (
     <>
-      <Header route={route} navigate={navigate} theme={theme} toggleTheme={toggleTheme} />
+      <Header
+        account={account}
+        route={route}
+        navigate={navigate}
+        theme={theme}
+        toggleTheme={toggleTheme}
+        onLogout={handleLogout}
+      />
       <main>
         {route === 'home' && <HomePage navigate={navigate} />}
         {route === 'service' && <ServicePage navigate={navigate} />}
@@ -330,13 +410,18 @@ function App() {
         )}
         {route === 'confirmation' && <ConfirmationPage navigate={navigate} quantity={quantity} />}
         {route === 'contact' && <ContactPage />}
+        {route === 'login' && <LoginPage account={account} navigate={navigate} onLogin={handleLogin} />}
+        {route === 'register' && <RegisterPage navigate={navigate} onRegister={handleRegister} />}
+        {route === 'account' && (
+          <AccountPage account={account} navigate={navigate} onLogout={handleLogout} />
+        )}
       </main>
       <Footer />
     </>
   )
 }
 
-function Header({ route, navigate, theme, toggleTheme }) {
+function Header({ account, route, navigate, theme, toggleTheme, onLogout }) {
   const activeGroup =
     route === 'service'
       ? 'service'
@@ -369,9 +454,12 @@ function Header({ route, navigate, theme, toggleTheme }) {
         <button type="button" aria-label="Koszyk" onClick={() => navigate('cart')}>
           <Icon name="cart" />
         </button>
-        <button type="button" aria-label="Konto klienta">
-          <Icon name="user" />
-        </button>
+        <AccountMegaMenu
+          account={account}
+          isActive={['login', 'register', 'account'].includes(route)}
+          navigate={navigate}
+          onLogout={onLogout}
+        />
         <button type="button" aria-label="Szukaj">
           <Icon name="search" />
         </button>
@@ -385,6 +473,73 @@ function Header({ route, navigate, theme, toggleTheme }) {
         </button>
       </div>
     </header>
+  )
+}
+
+function AccountMegaMenu({ account, isActive, navigate, onLogout }) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const goTo = (page) => {
+    setIsOpen(false)
+    navigate(page)
+  }
+
+  const logout = () => {
+    setIsOpen(false)
+    onLogout()
+  }
+
+  return (
+    <div className="account-menu-wrap" onKeyDown={(event) => event.key === 'Escape' && setIsOpen(false)}>
+      <button
+        className={`account-trigger ${isActive ? 'is-active' : ''}`}
+        type="button"
+        aria-label="Konto klienta"
+        aria-expanded={isOpen}
+        aria-haspopup="true"
+        onClick={() => setIsOpen((current) => !current)}
+      >
+        <Icon name="user" />
+        {account && <span className="account-status-dot" aria-hidden="true"></span>}
+      </button>
+      <div className={`account-mega ${isOpen ? 'is-open' : ''}`} role="menu">
+        <div className="account-mega-header">
+          <div>
+            <p className="eyebrow">Konto klienta</p>
+            <h2>{account ? `Cześć, ${account.name.split(' ')[0]}` : 'Witaj w Modern Tradesman'}</h2>
+            <p>
+              Zarządzaj zamówieniami, wycenami i danymi kontaktowymi w jednym miejscu.
+            </p>
+          </div>
+          {account ? (
+            <button className="account-menu-logout" type="button" onClick={logout}>
+              Wyloguj
+            </button>
+          ) : (
+            <button className="account-menu-logout" type="button" onClick={() => goTo('login')}>
+              Zaloguj
+            </button>
+          )}
+        </div>
+        <div className="account-mega-grid">
+          <button type="button" role="menuitem" onClick={() => goTo('login')}>
+            <Icon name="user" />
+            <strong>Logowanie</strong>
+            <span>Wejdź do panelu klienta i sprawdź ostatnie zamówienia.</span>
+          </button>
+          <button type="button" role="menuitem" onClick={() => goTo('register')}>
+            <Icon name="shield" />
+            <strong>Rejestracja</strong>
+            <span>Załóż konto, żeby szybciej wysyłać zapytania o wyceny.</span>
+          </button>
+          <button type="button" role="menuitem" onClick={() => goTo('account')}>
+            <Icon name="home" />
+            <strong>Moje konto</strong>
+            <span>Dane klienta, adres, statusy i historia zakupów.</span>
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -445,11 +600,11 @@ function Breadcrumb({ items }) {
   )
 }
 
-function Button({ children, icon, onClick, variant = 'primary', className = '' }) {
+function Button({ children, icon, onClick, variant = 'primary', className = '', type = 'button' }) {
   return (
     <button
       className={`button ${variant} ${className}`}
-      type="button"
+      type={type}
       onClick={onClick}
     >
       {icon && <Icon name={icon} />}
@@ -1248,6 +1403,230 @@ function ConfirmationPage({ navigate, quantity }) {
         </aside>
       </div>
     </section>
+  )
+}
+
+function LoginPage({ account, navigate, onLogin }) {
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    onLogin(new FormData(event.currentTarget))
+  }
+
+  return (
+    <section className="page-section tall auth-page">
+      <Breadcrumb items={['Strona główna', 'Konto', 'Logowanie']} />
+      <div className="auth-layout">
+        <div className="auth-copy">
+          <p className="eyebrow">Panel klienta</p>
+          <h1>Zaloguj się do konta</h1>
+          <p>
+            Sprawdź status zamówień, wróć do zapisanych wycen i szybciej
+            zamawiaj materiały do kolejnych prac.
+          </p>
+          <div className="auth-benefits">
+            <FeatureLine text="Historia zamówień i status dostawy w jednym widoku." />
+            <FeatureLine text="Dane kontaktowe i adresowe dostępne przy kolejnych zakupach." />
+            <FeatureLine text="Szybki powrót do zapytań o usługę malowania lub remontu." />
+          </div>
+        </div>
+        <form className="auth-card" onSubmit={handleSubmit}>
+          <h2>Logowanie</h2>
+          <label>
+            Adres e-mail
+            <input
+              name="email"
+              type="email"
+              defaultValue={account?.email || 'jan.kowalski@example.com'}
+              required
+            />
+          </label>
+          <label>
+            Hasło
+            <input name="password" type="password" defaultValue="demo1234" minLength="6" required />
+          </label>
+          <div className="auth-options">
+            <label className="checkbox-line">
+              <input type="checkbox" defaultChecked />
+              Zapamiętaj mnie
+            </label>
+            <button type="button" onClick={() => navigate('register')}>
+              Nie mam konta
+            </button>
+          </div>
+          <Button type="submit" icon="user" className="wide">
+            Zaloguj się
+          </Button>
+          <p className="fine-print">
+            To wersja demonstracyjna formularza. Dane zostaną zapisane lokalnie w przeglądarce.
+          </p>
+        </form>
+      </div>
+    </section>
+  )
+}
+
+function RegisterPage({ navigate, onRegister }) {
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    onRegister(new FormData(event.currentTarget))
+  }
+
+  return (
+    <section className="page-section tall auth-page">
+      <Breadcrumb items={['Strona główna', 'Konto', 'Rejestracja']} />
+      <div className="auth-layout reverse">
+        <form className="auth-card" onSubmit={handleSubmit}>
+          <h2>Utwórz konto</h2>
+          <label>
+            Imię i nazwisko
+            <input name="name" defaultValue="Jan Kowalski" required />
+          </label>
+          <label>
+            Adres e-mail
+            <input name="email" type="email" defaultValue="jan.kowalski@example.com" required />
+          </label>
+          <div className="two-fields">
+            <label>
+              Telefon
+              <input name="phone" defaultValue="+48 123 456 789" required />
+            </label>
+            <label>
+              Firma
+              <input name="company" defaultValue="Klient indywidualny" />
+            </label>
+          </div>
+          <label>
+            Hasło
+            <input name="password" type="password" defaultValue="demo1234" minLength="6" required />
+          </label>
+          <label className="checkbox-line">
+            <input type="checkbox" required defaultChecked />
+            Akceptuję regulamin sklepu oraz politykę prywatności.
+          </label>
+          <Button type="submit" icon="check" className="wide">
+            Zarejestruj konto
+          </Button>
+          <button className="auth-switch" type="button" onClick={() => navigate('login')}>
+            Mam już konto
+          </button>
+        </form>
+        <div className="auth-copy">
+          <p className="eyebrow">Nowe konto</p>
+          <h1>Załóż konto klienta</h1>
+          <p>
+            Konto przyspiesza składanie zamówień i pomaga wracać do rozmów o wycenach,
+            produktach oraz usługach remontowych.
+          </p>
+          <div className="auth-highlight">
+            <strong>Co zyskujesz?</strong>
+            <span>Panel zamówień, zapisane dane kontaktowe i szybki dostęp do wycen.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function AccountPage({ account, navigate, onLogout }) {
+  if (!account) {
+    return (
+      <section className="page-section tall account-page">
+        <Breadcrumb items={['Strona główna', 'Konto', 'Moje konto']} />
+        <div className="account-empty">
+          <p className="eyebrow">Moje konto</p>
+          <h1>Zaloguj się, aby zobaczyć panel klienta</h1>
+          <p>
+            Panel konta pokazuje dane klienta, ostatnie zamówienia, zapytania o wycenę
+            i status realizacji usług.
+          </p>
+          <div className="button-row">
+            <Button icon="user" onClick={() => navigate('login')}>
+              Zaloguj się
+            </Button>
+            <Button variant="secondary" onClick={() => navigate('register')}>
+              Utwórz konto
+            </Button>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  return (
+    <section className="page-section tall account-page">
+      <Breadcrumb items={['Strona główna', 'Konto', 'Moje konto']} />
+      <div className="account-hero">
+        <div>
+          <p className="eyebrow">Moje konto</p>
+          <h1>Dzień dobry, {account.name.split(' ')[0]}</h1>
+          <p>
+            Tu znajdziesz zamówienia, zapisane dane oraz bieżące sprawy związane
+            z zakupami i usługami Modern Tradesman Co.
+          </p>
+          <div className="button-row">
+            <Button onClick={() => navigate('product')}>Przejdź do produktów</Button>
+            <Button variant="secondary" onClick={() => navigate('contact')}>
+              Poproś o wycenę
+            </Button>
+          </div>
+        </div>
+        <aside className="account-id-card">
+          <span className="success-mark small">
+            <Icon name="user" />
+          </span>
+          <h2>{account.name}</h2>
+          <p>{account.email}</p>
+          <button type="button" onClick={onLogout}>
+            Wyloguj
+          </button>
+        </aside>
+      </div>
+
+      <div className="account-dashboard">
+        <article className="account-panel">
+          <h2>Dane klienta</h2>
+          <div className="account-info-list">
+            <AccountInfoRow label="E-mail" value={account.email} />
+            <AccountInfoRow label="Telefon" value={account.phone} />
+            <AccountInfoRow label="Typ konta" value={account.company} />
+            <AccountInfoRow label="Klient od" value={account.memberSince} />
+          </div>
+        </article>
+        <article className="account-panel">
+          <h2>Ostatnie zamówienie</h2>
+          <OrderLine image={paintSwatchImg} title="Farba wewnętrzna Premium 10L" meta="2 szt. | W realizacji" price={formatPLN(298)} />
+          <div className="account-status">
+            <span></span>
+            <div>
+              <strong>Przygotowanie do wysyłki</strong>
+              <p>Planowana dostawa: jutro po 12:00.</p>
+            </div>
+          </div>
+        </article>
+        <article className="account-panel">
+          <h2>Wyceny i usługi</h2>
+          <div className="account-service-list">
+            <div>
+              <strong>Malowanie mieszkania 42 m²</strong>
+              <p>Wycena robocza, oczekuje na potwierdzenie metrażu.</p>
+            </div>
+            <div>
+              <strong>Dobór materiałów</strong>
+              <p>Rekomendowane farby, grunt i zestaw zabezpieczeń.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  )
+}
+
+function AccountInfoRow({ label, value }) {
+  return (
+    <div>
+      <span>{label}</span>
+      <strong>{value}</strong>
+    </div>
   )
 }
 
