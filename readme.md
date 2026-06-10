@@ -1,68 +1,76 @@
-# Modern Tradesman Co. UI
+# Modern Tradesman Co.
 
-Frontend project for a construction and hardware shop website. The app presents renovation services, painting products, a shopping cart, checkout flow, order confirmation, and a contact/quote page.
+Projekt frontendowy sklepu budowlanego i serwisu remontowego przygotowany w React + Vite. Aplikacja odwzorowuje ekran glowny, usluge malowania, produkt, koszyk, checkout, potwierdzenie zamowienia, kontakt oraz widoki konta klienta.
 
-The main application is located in `hardware-shop`.
+Glowna aplikacja znajduje sie w katalogu `hardware-shop`.
 
-## Project Structure
+## Struktura
 
 ```text
 TPF/
-  hardware-shop/     React + Vite frontend application
-  reference/         PDF reference screens and design materials
-  readme.md          Project overview
+  hardware-shop/                 React + Vite frontend application
+    docs/screenshots/            screeny aplikacji do dokumentacji
+    src/components/              komponenty wspolne
+    src/pages/                   widoki podlaczone do React Routera
+    src/utils/analytics.js       konfiguracja Google Analytics i Hotjar
+  reference/                     PDF-y referencyjne z makietami
+  readme.md                      dokumentacja projektu
 ```
 
-## Features
+## Funkcje
 
-- Homepage for services, products, projects, advice, and call-to-action sections.
-- Service page for painting and renovation work.
-- Product page with related products and FAQ.
-- Cart, checkout, and order confirmation views.
-- Contact and quote request page.
-- Responsive layout for desktop and mobile.
-- Dark mode with an animated sun-to-moon toggle and saved user preference.
+- Strona glowna z sekcjami uslug, produktow, realizacji, porad i CTA.
+- Osobne widoki dla uslugi, produktu, koszyka, checkoutu, potwierdzenia, kontaktu, logowania, rejestracji i konta.
+- Routing przez React Router, lacznie z fallbackiem 404.
+- Komponenty wspolne dla layoutu, kart, ikon, przyciskow i elementow formularzy.
+- Responsywny layout oraz tryb jasny/ciemny zapisywany w `localStorage`.
+- Integracja Google Analytics 4 przez `react-ga4`.
+- Integracja Hotjar przez `@hotjar/browser`.
+- Listener zmian tras SPA wysylajacy pageview do GA4 i `stateChange` do Hotjar.
 
-## Tech Stack
+## Technologie
 
-- React
-- Vite
+- React 19
+- React Router
+- Vite 8
 - CSS custom properties
+- Google Analytics 4 (`react-ga4`)
+- Hotjar (`@hotjar/browser`)
 - ESLint
 
-## Getting Started
+## Uruchomienie
 
-Go to the application folder:
+Przejdz do katalogu aplikacji:
 
 ```bash
 cd hardware-shop
 ```
 
-Install dependencies:
+Zainstaluj zaleznosci:
 
 ```bash
 npm install
 ```
 
-Start the development server:
+Uruchom serwer deweloperski:
 
 ```bash
 npm run dev
 ```
 
-If PowerShell blocks `npm.ps1` on Windows, use:
+Jesli PowerShell blokuje `npm.ps1`, uzyj:
 
 ```bash
 npm.cmd run dev
 ```
 
-Then open the local URL printed by Vite, usually:
+Nastepnie otworz adres wypisany przez Vite, zwykle:
 
 ```text
 http://127.0.0.1:5173/
 ```
 
-## Useful Commands
+## Komendy
 
 ```bash
 npm run dev
@@ -71,6 +79,97 @@ npm run lint
 npm run preview
 ```
 
-## Notes
+## Routing
 
-The app uses React Router browser navigation, so pages are available under paths such as `/product`, `/cart`, `/login`, and `/account`. Unknown paths render a 404 page. Theme preference is saved in `localStorage` under the `theme` key.
+Aplikacja ma nastepujace trasy:
+
+```text
+/
+/service
+/product
+/cart
+/checkout
+/confirmation
+/contact
+/login
+/register
+/account
+/*
+```
+
+Nieistniejace sciezki renderuja widok 404.
+
+## Google Analytics i Hotjar
+
+Integracje z Google Analytics 4 i Hotjar sa skonfigurowane przez zmienne srodowiskowe Vite. Konfiguracja lokalna znajduje sie w pliku `hardware-shop/.env.local`:
+
+```env
+VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+VITE_HOTJAR_SITE_ID=123456
+VITE_HOTJAR_VERSION=6
+VITE_ANALYTICS_DEBUG=false
+```
+
+Implementacja znajduje sie w:
+
+- `hardware-shop/src/utils/analytics.js` - inicjalizacja GA4 i Hotjar.
+- `hardware-shop/src/components/AnalyticsListener.jsx` - wysylanie pageview przy zmianie trasy.
+- `hardware-shop/src/App.jsx` - listener podlaczony wewnatrz `BrowserRouter`.
+
+Przejscia miedzy trasami React Router sa raportowane jako pageview w GA4 oraz jako zmiany stanu strony w Hotjar.
+
+## Screeny aplikacji
+
+Screeny zostaly zapisane w `hardware-shop/docs/screenshots`.
+
+### Strona glowna
+
+![Strona glowna](hardware-shop/docs/screenshots/01-home.png)
+
+### Usluga
+
+![Usluga malowania](hardware-shop/docs/screenshots/02-service.png)
+
+### Produkt
+
+![Produkt](hardware-shop/docs/screenshots/03-product.png)
+
+### Koszyk
+
+![Koszyk](hardware-shop/docs/screenshots/04-cart.png)
+
+### Checkout
+
+![Checkout](hardware-shop/docs/screenshots/05-checkout.png)
+
+### Kontakt
+
+![Kontakt](hardware-shop/docs/screenshots/06-contact.png)
+
+### Logowanie
+
+![Logowanie](hardware-shop/docs/screenshots/07-login.png)
+
+### Konto
+
+![Konto](hardware-shop/docs/screenshots/08-account.png)
+
+## Screeny Google Analytics i Hotjar
+
+Screeny paneli analitycznych dokumentuja dzialajaca integracje Google Analytics 4 i Hotjar.
+
+### Google Analytics - Realtime
+
+![Google Analytics realtime](hardware-shop/docs/screenshots/google-analytics-realtime.png)
+
+### Google Analytics - Page views
+
+![Google Analytics page views](hardware-shop/docs/screenshots/google-analytics-pages.png)
+
+### Hotjar - Dashboard
+
+![Hotjar dashboard](hardware-shop/docs/screenshots/hotjar-dashboard.png)
+
+### Hotjar - Recording
+
+![Hotjar recording](hardware-shop/docs/screenshots/hotjar-recording.png)

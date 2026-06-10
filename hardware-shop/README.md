@@ -11,6 +11,8 @@ React + Vite frontend for Modern Tradesman Co., a construction services and hard
 - Home, service, product, cart, checkout, confirmation, contact, login, registration, account, and 404 screens.
 - Product and service cards using local image assets.
 - Responsive grids and mobile-friendly layouts.
+- Google Analytics 4 integration with SPA pageview tracking.
+- Hotjar integration with route state changes.
 - ESLint setup for code quality checks.
 
 ## Tech Stack
@@ -19,6 +21,8 @@ React + Vite frontend for Modern Tradesman Co., a construction services and hard
 - React Router
 - Vite 8
 - CSS custom properties
+- Google Analytics 4 (`react-ga4`)
+- Hotjar (`@hotjar/browser`)
 - ESLint 10
 
 ## Requirements
@@ -69,6 +73,23 @@ npm run preview
 ```bash
 npm run lint
 ```
+
+## Analytics Setup
+
+Google Analytics 4 and Hotjar are configured with Vite environment variables in `.env.local`:
+
+```env
+VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+VITE_HOTJAR_SITE_ID=123456
+VITE_HOTJAR_VERSION=6
+VITE_ANALYTICS_DEBUG=false
+```
+
+Analytics code is split into:
+
+- `src/utils/analytics.js` - initializes Google Analytics and Hotjar.
+- `src/components/AnalyticsListener.jsx` - sends pageviews on React Router location changes.
+- `src/App.jsx` - mounts the listener inside `BrowserRouter`.
 
 ## App Routes
 
@@ -122,3 +143,25 @@ or:
 ```
 
 This drives the color palette through CSS variables.
+
+## Documentation Screenshots
+
+Application screenshots are stored in `docs/screenshots`:
+
+![Home](docs/screenshots/01-home.png)
+![Service](docs/screenshots/02-service.png)
+![Product](docs/screenshots/03-product.png)
+![Cart](docs/screenshots/04-cart.png)
+![Checkout](docs/screenshots/05-checkout.png)
+![Contact](docs/screenshots/06-contact.png)
+![Login](docs/screenshots/07-login.png)
+![Account](docs/screenshots/08-account.png)
+
+Analytics screenshots are stored with the application screenshots:
+
+![Google Analytics realtime](docs/screenshots/google-analytics-realtime.png)
+![Google Analytics page views](docs/screenshots/google-analytics-pages.png)
+![Hotjar dashboard](docs/screenshots/hotjar-dashboard.png)
+![Hotjar recording](docs/screenshots/hotjar-recording.png)
+
+The analytics screenshots show active pageview tracking in GA4 and user behavior tracking in Hotjar.
