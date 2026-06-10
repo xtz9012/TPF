@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import './App.css'
 
+import { AnalyticsListener } from './components/AnalyticsListener'
 import { Footer, Header } from './components/layout'
 import { AccountPage } from './pages/AccountPage'
 import { CartPage } from './pages/CartPage'
@@ -179,6 +180,7 @@ function AppShell() {
 function App() {
   return (
     <BrowserRouter>
+      <AnalyticsListener />
       <AppShell />
     </BrowserRouter>
   )
