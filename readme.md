@@ -24,8 +24,8 @@ TPF/
 - Routing przez React Router, lacznie z fallbackiem 404.
 - Komponenty wspolne dla layoutu, kart, ikon, przyciskow i elementow formularzy.
 - Responsywny layout oraz tryb jasny/ciemny zapisywany w `localStorage`.
-- Integracja Google Analytics 4 przez `react-ga4`.
-- Integracja Hotjar przez `@hotjar/browser`.
+- Integracja Google Analytics 4 przez reczny tag `gtag.js`.
+- Integracja Hotjar przez tag Contentsquare oraz `@hotjar/browser`.
 - Listener zmian tras SPA wysylajacy pageview do GA4 i `stateChange` do Hotjar.
 
 ## Technologie
@@ -162,11 +162,11 @@ Screeny paneli analitycznych dokumentuja dzialajaca integracje Google Analytics 
 
 ### Google Analytics - Realtime
 
-![Google Analytics realtime](hardware-shop/docs/screenshots/google-analytics-realtime.png)
+![Google Analytics realtime](hardware-shop/docs/screenshots/09-google_analytics.png)
 
-### Google Analytics - Page views
+### Google Analytics - Strony w czasie rzeczywistym
 
-![Google Analytics page views](hardware-shop/docs/screenshots/google-analytics-pages.png)
+![Google Analytics strony w czasie rzeczywistym](hardware-shop/docs/screenshots/10-realtime_sites.png)
 
 ### Hotjar - Dashboard
 

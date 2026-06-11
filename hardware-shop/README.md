@@ -161,8 +161,8 @@ Application screenshots are stored in `docs/screenshots`:
 
 Analytics screenshots are stored with the application screenshots:
 
-![Google Analytics realtime](docs/screenshots/google-analytics-realtime.png)
-![Google Analytics page views](docs/screenshots/google-analytics-pages.png)
+![Google Analytics realtime](docs/screenshots/09-google_analytics.png)
+![Google Analytics realtime pages](docs/screenshots/10-realtime_sites.png)
 ![Hotjar dashboard](docs/screenshots/hotjar-dashboard.png)
 ![Hotjar recording](docs/screenshots/hotjar-recording.png)
 
