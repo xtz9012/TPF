@@ -34,7 +34,7 @@ TPF/
 - React Router
 - Vite 8
 - CSS custom properties
-- Google Analytics 4 (`react-ga4`)
+- Google Analytics 4 (`gtag.js`)
 - Hotjar (`@hotjar/browser`)
 - ESLint
 
@@ -107,16 +107,18 @@ Integracje z Google Analytics 4 i Hotjar sa skonfigurowane przez zmienne srodowi
 VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 VITE_HOTJAR_SITE_ID=123456
 VITE_HOTJAR_VERSION=6
+VITE_CONTENTSQUARE_TAG_URL=https://t.contentsquare.net/uxa/2d1deeef69c9c.js
 VITE_ANALYTICS_DEBUG=false
 ```
 
 Implementacja znajduje sie w:
 
-- `hardware-shop/src/utils/analytics.js` - inicjalizacja GA4 i Hotjar.
+- `hardware-shop/index.html` - reczny tag Google `gtag.js` oraz tag Contentsquare wymagany przez panel Hotjar.
+- `hardware-shop/src/utils/analytics.js` - inicjalizacja GA4, Hotjar i wysylanie pageview dla tras SPA.
 - `hardware-shop/src/components/AnalyticsListener.jsx` - wysylanie pageview przy zmianie trasy.
 - `hardware-shop/src/App.jsx` - listener podlaczony wewnatrz `BrowserRouter`.
 
-Przejscia miedzy trasami React Router sa raportowane jako pageview w GA4 oraz jako zmiany stanu strony w Hotjar.
+Przejscia miedzy trasami React Router sa raportowane jako pageview w GA4 oraz jako zmiany stanu strony w Hotjar. W kodzie zostaly dodane domyslne identyfikatory projektu, dlatego build zawiera konfiguracje analityki takze wtedy, gdy hosting nie przekaze zmiennych srodowiskowych do procesu budowania.
 
 ## Screeny aplikacji
 

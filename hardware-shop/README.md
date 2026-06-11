@@ -21,7 +21,7 @@ React + Vite frontend for Modern Tradesman Co., a construction services and hard
 - React Router
 - Vite 8
 - CSS custom properties
-- Google Analytics 4 (`react-ga4`)
+- Google Analytics 4 (`gtag.js`)
 - Hotjar (`@hotjar/browser`)
 - ESLint 10
 
@@ -82,12 +82,14 @@ Google Analytics 4 and Hotjar are configured with Vite environment variables in 
 VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 VITE_HOTJAR_SITE_ID=123456
 VITE_HOTJAR_VERSION=6
+VITE_CONTENTSQUARE_TAG_URL=https://t.contentsquare.net/uxa/2d1deeef69c9c.js
 VITE_ANALYTICS_DEBUG=false
 ```
 
 Analytics code is split into:
 
-- `src/utils/analytics.js` - initializes Google Analytics and Hotjar.
+- `index.html` - loads the manual Google `gtag.js` tag and the Contentsquare tag required by the Hotjar panel.
+- `src/utils/analytics.js` - initializes Google Analytics, Hotjar, and SPA pageview tracking.
 - `src/components/AnalyticsListener.jsx` - sends pageviews on React Router location changes.
 - `src/App.jsx` - mounts the listener inside `BrowserRouter`.
 
