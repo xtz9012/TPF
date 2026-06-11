@@ -36,7 +36,8 @@ function loadGoogleTag() {
   }
 
   window.gtag('js', new Date())
-  window.gtag('config', gaMeasurementId, { send_page_view: false })
+  window.gtag('config', gaMeasurementId)
+  lastTrackedPage = `${window.location.pathname}${window.location.search}`
 }
 
 function loadContentsquareTag() {
