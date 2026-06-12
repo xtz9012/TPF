@@ -171,7 +171,3 @@ Screeny paneli analitycznych dokumentuja dzialajaca integracje Google Analytics 
 ### Hotjar - Dashboard
 
 ![Hotjar dashboard](hardware-shop/docs/screenshots/hotjar-dashboard.png)
-
-### Hotjar - Recording
-
-![Hotjar recording](hardware-shop/docs/screenshots/hotjar-recording.png)
