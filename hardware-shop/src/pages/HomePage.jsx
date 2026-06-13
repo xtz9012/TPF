@@ -194,23 +194,6 @@ export function HomePage({ navigate }) {
           </Button>
         </div>
       </section>
-
-      <section className="newsletter-section">
-        <div className="newsletter-content">
-          <h2>Bądź na bieżąco z najnowszymi poradami i promocjami</h2>
-          <p>Subskrybuj nasz newsletter i otrzymuj inspiracje remontowe oraz specjalne oferty.</p>
-          <form
-            className="newsletter-form"
-            onSubmit={(event) => {
-              event.preventDefault()
-              alert('Dziękujemy za subskrypcję! Potwierdzenie wysłane na Twój adres e-mail.')
-            }}
-          >
-            <input type="email" placeholder="Twój adres e-mail" required />
-            <button type="submit">Subskrybuj</button>
-          </form>
-        </div>
-      </section>
     </>
   )
 }
