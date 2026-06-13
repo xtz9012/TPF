@@ -460,7 +460,7 @@ p {
   align-items: center;
   min-height: 560px;
   padding: 78px max(40px, calc((100vw - var(--max)) / 2)) 60px;
-  background: linear-gradient(90deg, var(--paper) 0%, var(--paper) 52%, var(--surface-soft) 52%, var(--surface-soft) 100%);
+  background: var(--paper);
 }
 
 .hero-copy {
